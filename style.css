@@ -98,12 +98,14 @@ header {
 .container {
     margin-top: 90px;
     width: 500px;
+    display: grid;
+    justify-content: center;
 }
 
 table {
     border-collapse: collapse;
-    width: inherit;
-    height: 500px;
+    width: 400px;
+    height: 400px;
     table-layout: fixed;
 }
 
