@@ -114,6 +114,10 @@ table td {
     padding: 20px;
 }
 
+table td img {
+    height: 120px;
+}
+
 table tr:first-child td {
     border-top: 0;
 }
