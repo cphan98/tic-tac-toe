@@ -15,13 +15,16 @@ const Gameboard = (function () {
 const Player = (function (playerRole) {
     let role = playerRole; // 1 for 'x', 0 for 'o'
     let isWinner = false;
+    let winCount = 0;
 
     const getRole = () => role;
     const setRole = (playerRole) => role = playerRole;
     const getWinner = () => isWinner;
     const setWinner = (status) => isWinner = status;
+    const getWinCount = () => winCount;
+    const incWinCount = () => winCount++;
 
-    return { getRole , setRole, getWinner, setWinner };
+    return { getRole , setRole, getWinner, setWinner, getWinCount, incWinCount };
 })();
 
 const Game = (function () {
@@ -137,5 +140,5 @@ const Game = (function () {
 })();
 
 const Display = (function () {
-    
+
 })();
