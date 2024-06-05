@@ -3,8 +3,11 @@ const Gameboard = (function () {
                      [null, null, null], 
                      [null, null, null]]; // board of 3x3
 
+    // getters and setters
     const getGameboard = () => gameboard;
     const setGameboardVal = (row, col, val) => gameboard[row][col] = val;
+    
+    // functions
     const resetGameboard = () => gameboard = [[null, null, null], 
                                               [null, null, null], 
                                               [null, null, null]];
@@ -12,22 +15,23 @@ const Gameboard = (function () {
     return { getGameboard, setGameboardVal, resetGameboard };
 })();
 
-const Player = (function () {
+function Player() {
     let role; // 1 for 'x', 0 for 'o'
-    let isWinner = false;
     let winCount = 0;
 
+    // getters and setters
     const getRole = () => role;
     const setRole = (playerRole) => role = playerRole;
-    const getWinner = () => isWinner;
-    const setWinner = (status) => isWinner = status;
     const getWinCount = () => winCount;
+
+    // fucntions
     const incWinCount = () => winCount++;
 
-    return { getRole , setRole, getWinner, setWinner, getWinCount, incWinCount };
-})();
+    return { getRole , setRole, getWinCount, incWinCount };
+};
 
 const Display = (function () {
+    // displays the win counts for X and O, and the draw count
     const displayHeader = (xPlayer, oPlayer, drawCount) => {
         let xContainer = document.querySelector(".x-container");
         let drawContainer = document.querySelector(".draw-container");
@@ -41,22 +45,20 @@ const Display = (function () {
         oWinCount.textContent = `${oPlayer.getWinCount()} wins`;
     }
 
+    // displays the game's grid: 3x3 table
     const displayGrid = (gameboard) => {
-        console.log('here');
         for (let i = 0; i < gameboard.length; i++) {
-            console.log('inside 1st loop')
             const row = document.querySelector(`.row${i}`);
-            console.log(row);
             for (let j = 0; j < gameboard[i].length; j++) {
                 const cell = row.querySelector(`.col${j}`);
                 const val = gameboard[i][j];
                 const img = document.createElement("img");
 
                 switch (val) {
-                    case 0:
+                    case 0: // O player
                         img.setAttribute("src", "images/letter-o.png");
                         break;
-                    case 1:
+                    case 1: // X player
                         img.setAttribute("src", "images/letter-x.png");
                         break;
                     default:
@@ -69,7 +71,38 @@ const Display = (function () {
         }
     }
 
-    return { displayHeader, displayGrid };
+    // displays the img of the player playing on hover
+    const displayOnHover = (playing) => {
+        const cells = document.querySelectorAll("td");
+        let imgSrc;
+
+        switch (playing.getRole()) {
+            case 0: // O player
+                imgSrc = "images/letter-o-grey.png";
+                break;
+            case 1: // X player
+                imgSrc = "images/letter-x-grey.png";
+                break;
+            default:
+                break;
+        }
+
+        for (let i = 0; i < cells.length; i++) {
+            const hoverImg = document.createElement("img");
+            hoverImg.classList.add("hover-img");
+            const cell = cells[i];
+
+            if (cell.childElementCount != 0){
+                console.log('no img added');
+                continue;
+            }
+
+            hoverImg.src = imgSrc;
+            cell.appendChild(hoverImg);
+        }
+    }
+
+    return { displayHeader, displayGrid, displayOnHover };
 })();
 
 const Game = (function () {
@@ -77,8 +110,8 @@ const Game = (function () {
     let gameboard = Gameboard;
 
     // initialize players
-    let player1 = Player;
-    let player2 = Player;
+    let player1 = Player();
+    let player2 = Player();
     player1.setRole(1);
     player2.setRole(0);
 
@@ -87,11 +120,17 @@ const Game = (function () {
     let playing = player1; // 'x' starts\
     let drawCount = 0;
 
-    const changePlayers = () => {
-        if (playing == player1) {
-            playing = player2;
-        } else {
-            playing = player1;
+    // alternates between players
+    const changePlayers = (playing) => {
+        switch (playing.getRole()) {
+            case 0: // O player
+                playing = player1;
+                break;
+            case 1: // X player
+                playing = player2;
+                breaks
+            default:
+                break;
         }
     }
 
@@ -158,18 +197,17 @@ const Game = (function () {
     }
 
     Display.displayHeader(player1, player2, drawCount);
-    console.log(gameboard.getGameboard());
     Display.displayGrid(gameboard.getGameboard());
 
     while (!winner || playCount != 9) {
         // display playing player img on hover
-        // TODO
+        Display.displayOnHover(playing);
 
         // update gameboard on click
         let row;
         let col;
         let val = playing.getRole;
-        gameboard.setGameboard(row, col, val);
+        gameboard.setGameboardVal(row, col, val);
 
         // check for winning pattern
         winner = checkPatern;

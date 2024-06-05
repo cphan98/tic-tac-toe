@@ -116,8 +116,17 @@ table td {
     padding: 20px;
 }
 
+.hover-img {
+    display: none;
+}
+
+table td:hover .hover-img {
+    display: block;
+    height: 85px;
+}
+
 table td img {
-    height: 120px;
+    height: 85px;
 }
 
 table tr:first-child td {
